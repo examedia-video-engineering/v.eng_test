@@ -1,0 +1,377 @@
+{
+  "Arn": "arn:aws:medialive:us-east-1:289306338426:channel:2973975",
+  "ChannelClass": "SINGLE_PIPELINE",
+  "Destinations": [
+    {
+      "Id": "destination1",
+      "LogicalInterfaceNames": [],
+      "MediaPackageSettings": [],
+      "Settings": [
+        {
+          "StreamName": "test01",
+          "Url": "rtmp://a.rtmp.youtube.com/live2"
+        }
+      ],
+      "SrtSettings": []
+    },
+    {
+      "Id": "destination2",
+      "LogicalInterfaceNames": [],
+      "MediaPackageSettings": [],
+      "Settings": [
+        {
+          "StreamName": "test01",
+          "Url": "rtmps://live-api.facebook.com:443/rtmp/"
+        }
+      ],
+      "SrtSettings": []
+    },
+    {
+      "Id": "destination3",
+      "LogicalInterfaceNames": [],
+      "MediaPackageSettings": [],
+      "Settings": [
+        {
+          "StreamName": "test01",
+          "Url": "rtmp://rtmp.twitch.tv/"
+        }
+      ],
+      "SrtSettings": []
+    }
+  ],
+  "EgressEndpoints": [
+    {
+      "SourceIp": "54.87.141.185"
+    }
+  ],
+  "EncoderSettings": {
+    "AudioDescriptions": [
+      {
+        "AudioSelectorName": "Default",
+        "AudioTypeControl": "FOLLOW_INPUT",
+        "CodecSettings": {
+          "AacSettings": {
+            "Bitrate": 128000,
+            "CodingMode": "CODING_MODE_2_0",
+            "InputType": "NORMAL",
+            "Profile": "LC",
+            "RateControlMode": "CBR",
+            "RawFormat": "NONE",
+            "SampleRate": 44100,
+            "Spec": "MPEG4"
+          }
+        },
+        "LanguageCodeControl": "FOLLOW_INPUT",
+        "Name": "audio_aac128_1"
+      },
+      {
+        "AudioSelectorName": "default",
+        "AudioTypeControl": "FOLLOW_INPUT",
+        "CodecSettings": {
+          "AacSettings": {
+            "Bitrate": 128000,
+            "CodingMode": "CODING_MODE_2_0",
+            "InputType": "NORMAL",
+            "Profile": "LC",
+            "RateControlMode": "CBR",
+            "RawFormat": "NONE",
+            "SampleRate": 48000,
+            "Spec": "MPEG4"
+          }
+        },
+        "LanguageCodeControl": "FOLLOW_INPUT",
+        "Name": "audio_aac128_3"
+      },
+      {
+        "AudioSelectorName": "default",
+        "AudioTypeControl": "FOLLOW_INPUT",
+        "CodecSettings": {
+          "AacSettings": {
+            "Bitrate": 128000,
+            "CodingMode": "CODING_MODE_1_0",
+            "InputType": "NORMAL",
+            "Profile": "LC",
+            "RateControlMode": "CBR",
+            "RawFormat": "NONE",
+            "SampleRate": 48000,
+            "Spec": "MPEG4"
+          }
+        },
+        "LanguageCodeControl": "FOLLOW_INPUT",
+        "Name": "audio_aac128_2"
+      }
+    ],
+    "CaptionDescriptions": [],
+    "OutputGroups": [
+      {
+        "Name": "YouTube",
+        "OutputGroupSettings": {
+          "RtmpGroupSettings": {
+            "AdMarkers": [],
+            "AuthenticationScheme": "COMMON",
+            "CacheFullBehavior": "DISCONNECT_IMMEDIATELY",
+            "CacheLength": 30,
+            "CaptionData": "ALL",
+            "RestartDelay": 15
+          }
+        },
+        "Outputs": [
+          {
+            "AudioDescriptionNames": [
+              "audio_aac128_1"
+            ],
+            "CaptionDescriptionNames": [],
+            "OutputName": "destination1",
+            "OutputSettings": {
+              "RtmpOutputSettings": {
+                "CertificateMode": "VERIFY_AUTHENTICITY",
+                "ConnectionRetryInterval": 2,
+                "Destination": {
+                  "DestinationRefId": "destination1"
+                },
+                "NumRetries": 10
+              }
+            },
+            "VideoDescriptionName": "video_1080p30"
+          }
+        ]
+      },
+      {
+        "Name": "Facebook",
+        "OutputGroupSettings": {
+          "RtmpGroupSettings": {
+            "AdMarkers": [],
+            "AuthenticationScheme": "COMMON",
+            "CacheFullBehavior": "DISCONNECT_IMMEDIATELY",
+            "CacheLength": 30,
+            "CaptionData": "ALL",
+            "RestartDelay": 15
+          }
+        },
+        "Outputs": [
+          {
+            "AudioDescriptionNames": [
+              "audio_aac128_2"
+            ],
+            "CaptionDescriptionNames": [],
+            "OutputName": "destination2",
+            "OutputSettings": {
+              "RtmpOutputSettings": {
+                "CertificateMode": "VERIFY_AUTHENTICITY",
+                "ConnectionRetryInterval": 2,
+                "Destination": {
+                  "DestinationRefId": "destination2"
+                },
+                "NumRetries": 10
+              }
+            },
+            "VideoDescriptionName": "video_720p30"
+          }
+        ]
+      },
+      {
+        "Name": "Twitch",
+        "OutputGroupSettings": {
+          "RtmpGroupSettings": {
+            "AdMarkers": [],
+            "AuthenticationScheme": "COMMON",
+            "CacheFullBehavior": "DISCONNECT_IMMEDIATELY",
+            "CacheLength": 30,
+            "CaptionData": "ALL",
+            "RestartDelay": 15
+          }
+        },
+        "Outputs": [
+          {
+            "AudioDescriptionNames": [
+              "audio_aac128_3"
+            ],
+            "CaptionDescriptionNames": [],
+            "OutputName": "destination3",
+            "OutputSettings": {
+              "RtmpOutputSettings": {
+                "CertificateMode": "VERIFY_AUTHENTICITY",
+                "ConnectionRetryInterval": 2,
+                "Destination": {
+                  "DestinationRefId": "destination3"
+                },
+                "NumRetries": 10
+              }
+            },
+            "VideoDescriptionName": "video_1080p30_2"
+          }
+        ]
+      }
+    ],
+    "TimecodeConfig": {
+      "Source": "EMBEDDED"
+    },
+    "VideoDescriptions": [
+      {
+        "CodecSettings": {
+          "H264Settings": {
+            "AdaptiveQuantization": "HIGH",
+            "AfdSignaling": "NONE",
+            "Bitrate": 5000000,
+            "ColorMetadata": "INSERT",
+            "EntropyEncoding": "CABAC",
+            "FlickerAq": "ENABLED",
+            "ForceFieldPictures": "DISABLED",
+            "FramerateControl": "SPECIFIED",
+            "FramerateDenominator": 1001,
+            "FramerateNumerator": 30000,
+            "GopBReference": "ENABLED",
+            "GopClosedCadence": 1,
+            "GopNumBFrames": 2,
+            "GopSize": 60,
+            "GopSizeUnits": "FRAMES",
+            "Level": "H264_LEVEL_4_1",
+            "LookAheadRateControl": "HIGH",
+            "NumRefFrames": 1,
+            "ParControl": "SPECIFIED",
+            "ParDenominator": 1,
+            "ParNumerator": 1,
+            "Profile": "HIGH",
+            "RateControlMode": "CBR",
+            "ScanType": "PROGRESSIVE",
+            "SceneChangeDetect": "ENABLED",
+            "Slices": 4,
+            "SpatialAq": "ENABLED",
+            "SubgopLength": "FIXED",
+            "Syntax": "DEFAULT",
+            "TemporalAq": "ENABLED",
+            "TimecodeInsertion": "DISABLED"
+          }
+        },
+        "Height": 1080,
+        "Name": "video_1080p30",
+        "RespondToAfd": "NONE",
+        "ScalingBehavior": "DEFAULT",
+        "Sharpness": 50,
+        "Width": 1920
+      },
+      {
+        "CodecSettings": {
+          "H264Settings": {
+            "AdaptiveQuantization": "HIGH",
+            "AfdSignaling": "NONE",
+            "Bitrate": 4000000,
+            "ColorMetadata": "INSERT",
+            "EntropyEncoding": "CABAC",
+            "FlickerAq": "ENABLED",
+            "ForceFieldPictures": "DISABLED",
+            "FramerateControl": "SPECIFIED",
+            "FramerateDenominator": 1001,
+            "FramerateNumerator": 30000,
+            "GopBReference": "ENABLED",
+            "GopClosedCadence": 1,
+            "GopNumBFrames": 3,
+            "GopSize": 2,
+            "GopSizeUnits": "SECONDS",
+            "Level": "H264_LEVEL_AUTO",
+            "LookAheadRateControl": "HIGH",
+            "NumRefFrames": 3,
+            "ParControl": "SPECIFIED",
+            "ParDenominator": 1,
+            "ParNumerator": 1,
+            "Profile": "HIGH",
+            "RateControlMode": "CBR",
+            "ScanType": "PROGRESSIVE",
+            "SceneChangeDetect": "ENABLED",
+            "Slices": 4,
+            "SpatialAq": "ENABLED",
+            "SubgopLength": "FIXED",
+            "Syntax": "DEFAULT",
+            "TemporalAq": "ENABLED",
+            "TimecodeInsertion": "DISABLED"
+          }
+        },
+        "Height": 720,
+        "Name": "video_720p30",
+        "RespondToAfd": "NONE",
+        "ScalingBehavior": "DEFAULT",
+        "Sharpness": 100,
+        "Width": 1280
+      },
+      {
+        "CodecSettings": {
+          "H264Settings": {
+            "AdaptiveQuantization": "HIGH",
+            "AfdSignaling": "NONE",
+            "Bitrate": 5000000,
+            "ColorMetadata": "INSERT",
+            "EntropyEncoding": "CABAC",
+            "FlickerAq": "ENABLED",
+            "ForceFieldPictures": "DISABLED",
+            "FramerateControl": "SPECIFIED",
+            "FramerateDenominator": 1001,
+            "FramerateNumerator": 30000,
+            "GopBReference": "DISABLED",
+            "GopClosedCadence": 1,
+            "GopNumBFrames": 3,
+            "GopSize": 2,
+            "GopSizeUnits": "SECONDS",
+            "Level": "H264_LEVEL_AUTO",
+            "LookAheadRateControl": "HIGH",
+            "NumRefFrames": 3,
+            "ParControl": "SPECIFIED",
+            "ParDenominator": 1,
+            "ParNumerator": 1,
+            "Profile": "HIGH",
+            "RateControlMode": "CBR",
+            "ScanType": "PROGRESSIVE",
+            "SceneChangeDetect": "ENABLED",
+            "Slices": 4,
+            "SpatialAq": "ENABLED",
+            "SubgopLength": "FIXED",
+            "Syntax": "DEFAULT",
+            "TemporalAq": "ENABLED",
+            "TimecodeInsertion": "DISABLED"
+          }
+        },
+        "Height": 1080,
+        "Name": "video_1080p30_2",
+        "RespondToAfd": "NONE",
+        "ScalingBehavior": "DEFAULT",
+        "Sharpness": 50,
+        "Width": 1920
+      }
+    ]
+  },
+  "Id": "2973975",
+  "InputAttachments": [
+    {
+      "InputAttachmentName": "slhd3",
+      "InputId": "7348090",
+      "InputSettings": {
+        "AudioSelectors": [],
+        "CaptionSelectors": [],
+        "DeblockFilter": "DISABLED",
+        "DenoiseFilter": "DISABLED",
+        "FilterStrength": 1,
+        "InputFilter": "AUTO",
+        "Smpte2038DataPreference": "IGNORE",
+        "SourceEndBehavior": "CONTINUE"
+      },
+      "LogicalInterfaceNames": []
+    }
+  ],
+  "InputSpecification": {
+    "Codec": "AVC",
+    "MaximumBitrate": "MAX_20_MBPS",
+    "Resolution": "HD"
+  },
+  "LogLevel": "DISABLED",
+  "Maintenance": {
+    "MaintenanceDay": "WEDNESDAY",
+    "MaintenanceStartTime": "21:00"
+  },
+  "MaintenanceStatus": "",
+  "MaintenanceWindow": "WEDNESDAY_2100",
+  "Name": "RTMP Push - clone",
+  "PipelineDetails": [],
+  "PipelinesRunningCount": 0,
+  "RoleArn": "arn:aws:iam::289306338426:role/MediaLiveAccessRole",
+  "State": "IDLE",
+  "Tags": {}
+}
