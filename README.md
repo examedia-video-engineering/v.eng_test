@@ -4,23 +4,26 @@
 A python script to interact with the AWS Media Services API and create a new MediaLive RTMP Input.
 
 Three source types are supported.   
-### AWS: ###
+### AWS ###
 ```
 ./rtmp_quick.py --source-type AWS --name aws_2 --app-name live --app-instance stream1  --security-group 10.10.10.11/32
 ```  
   
-### AWS_VPC:  ###
+### AWS_VPC  ###
 ```
 rtmp_quick.py --source-type AWS_VPC --name vpc-input1 --app-name live --app-instance stream1 --subnets subnet-49d65405 subnet-1138d57a  --security-group sg-f25d8d96  --role-arn arn:aws:iam::289306338XXX:role/MediaLiveAccessRole
 ```  
   
-### ON_PREMISES: ###
+### ON_PREMISES ###
 ```
 rtmp_quick.py --source-type ON_PREMISES --name onprem-input --app-name live --app-instance stream1 --network 3878051
 ```  
 
+### JSON CONFIG ###
 Most simple RTMP push input generation method, given that on_prem.json is properly setup:  
-``` rtmp_quick.py --config on_prem.json ```  
+``` 
+rtmp_quick.py --config on_prem.json
+```  
 Based on RTMP push MediaLive input setup https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/medialive/client/create_input.html
 
 A more sofisticated and easier to use script is "rtmp_new_input.py" can generate new ML_network, ML_security_group, and select existing SecurityGroups and Subnets, but is a bit of bloatware.
