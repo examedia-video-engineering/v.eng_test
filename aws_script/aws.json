@@ -2,7 +2,7 @@
   "Name": "aws-input-json",
   "Type": "RTMP_PUSH",
   "InputNetworkLocation": "AWS",
-  "InputSecurityGroups": ["1234567"],
+  "InputSecurityGroups": ["7563449"],
   "Destinations": [
     {"StreamName": "live/stream1"},
     {"StreamName": "live/stream2"}
