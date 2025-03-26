@@ -72,9 +72,9 @@ Quickest path to generate padded video output:
 ffmpeg -i aspect43.mp4 -vf "pad=ih*16/9:ih:(ow-iw)/2,setdar=16/9" -acodec copy -vcodec libx264 -profile:v high -crf 7 aspect169.mp4
 ```
 
-pad filter takes standard values pad=width:height:x:y  
+pad filter takes standard values pad=output_width:output_height:shift_x:shift_y 
 **width="ih=16/9"** takes input height and multiplies by 16, then divides by 9, making it proper width of an output file when going from 4:3 to 16:9.  
-**height="ih"** stays the same, output 16:9 file with the side bars has the same width as the source 4:3 file.  
+**height="ih"** stays the same, output 16:9 file with the side bars has the same height as the source 4:3 file.  
 **x="(ow-iw)/2"** shifts top left corner X position: input minus output widths divided by two = exactly one bar.  
 **"y"** is NULL, as height stays the same.  
 **"setdar=16/9"** - sets display aspect ratio to 16:9.  
