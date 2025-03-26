@@ -5,6 +5,7 @@ Internal company use only.
 Video eng test.
 AWS MediaLive encoder input setup: RTMP push via ON_PREMISE, AWS or AWS_VPC.
 by mediastream@gmail.com Dennis Perov
+mini report
 '''
 import boto3     # to API with AWS subsystems
 import argparse  # parse command line args
@@ -446,54 +447,8 @@ def create_rtmp_input(args, direct_config=None):
         print(f"Error creating RTMP input: {e}")
         raise
 
-def format_output(response, resource_info):
-    """Format API response with all requested fields"""
-    input_info = response.get('Input', {})
-    
-    # Determine if input is attached to any channels
-    attached = len(input_info.get('AttachedChannels', [])) > 0
-    state = "attached" if attached else "detached"
-    
-    report = {
-        "Input ID": input_info.get('Id', 'N/A'),
-        "Name": input_info.get('Name', 'N/A'),
-        "State": state,
-        "Attached Channels": input_info.get('AttachedChannels', []),
-        "Input ARN": input_info.get('Arn', 'N/A'),
-        "Type": input_info.get('Type', 'N/A'),
-        "Input Network Location": input_info.get('InputNetworkLocation', 'N/A'),
-        "Endpoints": [],
-        "Input Security Groups": input_info.get('SecurityGroups', []),
-        "VPC Security Groups": [sg for sg in resource_info['security_groups']],
-        "VPC Subnets": resource_info['subnets'],
-        "Networks": resource_info.get('networks', []),
-        "Tags": input_info.get('Tags', {})
-    }
-    
-    # Format detailed endpoint information
-    for i, dest in enumerate(input_info.get('Destinations', [])):
-        # Get availability zone if subnet info is available
-        az = 'N/A'
-        if resource_info['subnets'] and i < len(resource_info['subnets']):
-            subnet_id = resource_info['subnets'][i]
-            az = resource_info['availability_zones'].get(subnet_id, 'Unknown')
-            
-        endpoint = {
-            "URL": dest.get('Url', 'N/A'),
-            "IPv4": dest.get('Ip', 'N/A'),
-            "Port": dest.get('Port', 'N/A'),
-            "Network": dest.get('Network', 'N/A'),
-            "Network Routes": dest.get('NetworkRoutes', []),
-            "Availability Zone": az
-        }
-        report["Endpoints"].append(endpoint)
-    
-    return report
-
 def parse_arguments():
-    """Parse command line arguments"""
-    parser = argparse.ArgumentParser(description='Create AWS MediaLive RTMP Push Input')
-    
+    parser = argparse.ArgumentParser(description='Create AWS MediaLive RTMP Push Input')    
     parser.add_argument('--config', type=str, help='Path to JSON configuration file')
     parser.add_argument('--name', type=str, help='Name for the RTMP input (optional)')
     parser.add_argument('--app-name', type=str, help='Application name')
@@ -508,12 +463,10 @@ def parse_arguments():
     parser.add_argument('--static-ip', type=str, help='Static IP for ON_PREMISES')
     parser.add_argument('--network-routes', type=str, nargs='+', help='Routes (CIDR:gateway)')
     parser.add_argument('--tags', type=str, nargs='+', help='Tags (Key=Value)')
-    parser.add_argument('--region', type=str, default='us-west-2', help='AWS region')
-    
+    parser.add_argument('--region', type=str, default='us-east-2', help='AWS region')
     return parser.parse_args()
-
+  
 def main():
-    """Main function"""
     try:
         args = parse_arguments()
         
@@ -521,31 +474,22 @@ def main():
         direct_config = None
         if args.config:
             direct_config = load_config_file(args.config)
-            
-            # Make sure we have region for resource validation
             if not hasattr(args, 'region') or not args.region:
                 args.region = direct_config.get('region', 'us-west-2')
-                
             print(f"Using configuration from {args.config}")
         else:
-            # Validate basic required args when not using config
+            # Validate basic required args
             if not args.source_type:
                 print("Error: --source-type is required when not using config file")
                 return 1
-                
             if not args.app_name or not args.app_instance:
                 print("Error: --app-name and --app-instance are required when not using config file")
                 return 1
-        
+  
         response, resource_info = create_rtmp_input(args, direct_config)
-        report = format_output(response, resource_info)
         
-        print(json.dumps(report, indent=2))
+        print(json.dumps(response, indent=2, default=str)) # JSON pass through
         print("\nRTMP Input created successfully!")
-        
-        print("\nEndpoints:")
-        for i, endpoint in enumerate(report["Endpoints"]):
-            print(f"Endpoint {i+1}: {endpoint['URL']} (AZ: {endpoint['Availability Zone']})")
         
         return 0
     except Exception as e:
