@@ -3,10 +3,10 @@
   "Type": "RTMP_PUSH",
   "InputNetworkLocation": "AWS",
   "Vpc": {
-    "SubnetIds": ["subnet-1234abcd", "subnet-5678efgh"],
-    "SecurityGroupIds": ["sg-1234567890abcdef0"]
+    "SubnetIds": ["subnet-49d65405", "subnet-1138d57a"],
+    "SecurityGroupIds": ["sg-f25d8d96"]
   },
-  "RoleArn": "arn:aws:iam::123456789012:role/MediaLiveAccessRole",
+  "RoleArn": " arn:aws:iam::289306338xxx:role/MediaLiveAccessRole",
   "Destinations": [
     {"StreamName": "live/stream1"},
     {"StreamName": "live/stream1"}
