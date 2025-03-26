@@ -1,7 +1,15 @@
 # v.eng_test_02
 
-1. A python script to interact with the AWS Media Services API and create a MediaLive RTMP Input.  
-python add_awsmedia_rtmp_push.py --name MyRTMPInput --whitelist 172.118.1.0/24 --region us-west-2
+1. A python script to interact with the AWS Media Services API and create a MediaLive RTMP Input.
+Based on RTMP push MediaLive input setup.  https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/medialive/client/create_input.html
+
+AWS, AWS_VPC and ON_PREMISES source types are supported:
+./rtmp_quick.py --source-type AWS --name aws_2 --app-name live --app-instance stream1  --security-group 10.10.10.11/32
+./rtmp_quick.py --source-type AWS_VPC --name vpc-input1 --app-name live --app-instance stream1 --subnets subnet-49d65405 subnet-1138d57a  --security-group sg-f25d8d96  --role-arn arn:aws:iam::289306338XXX:role/MediaLiveAccessRole
+./rtmp_quick.py --source-type ON_PREMISES --name onprem-input --app-name live --app-instance stream1 --network 3878051
+
+Most simple RTMP push input generation method, given that on_prem.json is properly setup:
+./rtmp_quick.py --config on_prem.json
 
 
 2. FFmpeg command to take a 4:3 aspect video and add letterbars to make it 16:9.
@@ -15,5 +23,8 @@ pad filter takes standard values: pad=width:height:x:y;
 "c:v libx264 profile:v high and crf 7" are encoding parameters, use: h264 encoder,  high proifle (higher compression rate), and high constant quality that is nearly lossless for postprod user gen content use. For tier 1 it'd be MPEG2 or Apple ProRes normally. Also padding of a VOD asset would normally involve a FFprobe an Media Info parsing of a file, then based on tech metadata analysis generate a filter chain based on each frame analysis (inverse telecine, deinteralce, fps, resolution, pad, crop, volumenorm,  and other filters as needed). But it wouldn't be one command.
 
 3. Create an architecture diagram showing the main blocks involved in live streaming, starting from the live event site, ending at the end user.
-User gen live RTMP feeds published to YT/FB/Twitch: Usergen tab.
-Premium live broadcast: Premium tab 
+test_diagram_basic_layout3.pdf
+Top level diagram of all main items for live public CDNs RTMP, private CDN HLS/DASH, Sat and Cable distribution. page 1.
+Top level diagram of basic OTT AWS setup. page 2.
+
+Thanks!
