@@ -1,0 +1,27 @@
+{
+  "Name": "onprem-input-json",
+  "Type": "RTMP_PUSH",
+  "InputNetworkLocation": "ON_PREMISES",
+  "Destinations": [
+    {
+      "StreamName": "live/stream1",
+      "Network": "7928460",
+      "NetworkRoutes": [
+        {
+          "Cidr": "10.10.10.0/24",
+          "Gateway": "10.0.0.1"
+        }
+      ]
+    },
+    {
+      "StreamName": "live/stream1",
+      "Network": "7928460",
+      "NetworkRoutes": [
+        {
+          "Cidr": "10.10.10.0/24",
+          "Gateway": "10.10.10.1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "Name": "aws-input-json",
+  "Type": "RTMP_PUSH",
+  "InputNetworkLocation": "AWS",
+  "InputSecurityGroups": ["1234567"],
+  "Destinations": [
+    {"StreamName": "live/stream1"},
+    {"StreamName": "live/stream2"}
+  ],
+  "Tags": {
+    "Environment": "Production",
+    "Project": "LiveStream"
+  }
+}
