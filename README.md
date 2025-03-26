@@ -1,7 +1,7 @@
-# v.eng_test_02
+# Video Engineering test
 
 1. A python script to interact with the AWS Media Services API and create a MediaLive RTMP Input.
-Based on RTMP push MediaLive input setup.  https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/medialive/client/create_input.html
+Based on RTMP push MediaLive input setup https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/medialive/client/create_input.html
 
 AWS, AWS_VPC and ON_PREMISES source types are supported:
 ./rtmp_quick.py --source-type AWS --name aws_2 --app-name live --app-instance stream1  --security-group 10.10.10.11/32
@@ -20,7 +20,7 @@ pad filter takes standard values: pad=width:height:x:y;
 "x=(ow-iw)/2" moves the video's top left corner (x,y) position to the differnce bwetween input width and output width divided by two = exatly one bar.
 "y" is NULL, as height stays the same.
 "setdar=16/9" - sets display aspect ratio to 16:9
-"c:v libx264 profile:v high and crf 7" are encoding parameters, use: h264 encoder,  high proifle (higher compression rate), and high constant quality that is nearly lossless for postprod user gen content use. For tier 1 it'd be MPEG2 or Apple ProRes normally. Also padding of a VOD asset would normally involve a FFprobe an Media Info parsing of a file, then based on tech metadata analysis generate a filter chain based on each frame analysis (inverse telecine, deinteralce, fps, resolution, pad, crop, volumenorm,  and other filters as needed). But it wouldn't be one command.
+"c:v libx264 profile:v high and crf 7" are encoding parameters, use: h264 encoder,  high proifle (higher compression rate), and high constant quality that is nearly lossless for postprod user gen content use. For tier 1 it'd be MPEG2 or Apple ProRes normally. Also padding of a VOD asset would normally involve a FFprobe an Media Info parsing of a file, then based on tech metadata analysis generate a filter chain based on each frame analysis (inverse telecine, deinteralce, fps, resolution, pad, crop, volumenorm and other filters as needed). But that wouldn't be one command )
 
 3. Create an architecture diagram showing the main blocks involved in live streaming, starting from the live event site, ending at the end user.
 test_diagram_basic_layout3.pdf
