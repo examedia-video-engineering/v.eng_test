@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
-# (C) 2025 A Parent Media Company. MediaLive RTMP push input setup video engineering test.
-import boto3, argparse, uuid, re, ipaddress, json, sys, random, string
+# (C) 2025 A Parent Media Company. MediaLive RTMP push input setup video engineering test by Dennis Perov.
+import boto3, argparse, uuid, json, sys, random, string
 from botocore.exceptions import ClientError
 
-def load_config(file_path): #read json config file instead of command line.
+def load_config(file_path):                                 # read json config file instead of command line.
     try:
         with open(file_path, 'r') as f:
             return json.load(f)
     except Exception as e:
         sys.exit(f"Error loading config: {e}")
 
-def generate_name(name=None): #input name generation
+def generate_name(name=None):                               # input name generation
     if not name:
         return f"rtmp-input-{uuid.uuid4()}"
     suffix = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)) #add six random ascii characters for name uniqueness.
     return f"{name}-{suffix}"
 
-def create_security_group(client, cidr): #create CIDR sg 
+def create_security_group(client, cidr):                    # create CIDR sg 
     try:
         response = client.create_input_security_group(
             WhitelistRules=[{'Cidr': cidr}],
@@ -26,7 +26,7 @@ def create_security_group(client, cidr): #create CIDR sg
     except ClientError as e:
         sys.exit(f"Error creating security group: {e}")
 
-def create_network(client, name, ip_pools, routes=None): #validate and process ON_PREMISES inputs.
+def create_network(client, name, ip_pools, routes=None):    # process ON_PREMISES inputs.
     try:
         request = {
             'Name': name,
@@ -45,15 +45,15 @@ def create_rtmp_input(args):
     try:
         client = boto3.client('medialive', region_name=args.region)
 
-        if args.config:   # Use config file if provided
+        if args.config:                                     # Use config file if provided
             config = load_config(args.config)
             response = client.create_input(**config)
             return response
         
-        input_name = generate_name(args.name) # Basic request configuration
+        input_name = generate_name(args.name)               # Basic request configuration
         location = "ON_PREMISES" if args.source_type == "ON_PREMISES" else "AWS"
         
-        input_request = { #RTMP publishing points app/instance names.
+        input_request = {                                   # RTMP publishing points app/instance names.
             'Name': input_name,
             'Type': 'RTMP_PUSH',
             'InputNetworkLocation': location,
@@ -63,10 +63,10 @@ def create_rtmp_input(args):
             ]
         }
         
-        if args.tags: # Add cusotm tags
+        if args.tags:                                       # Add custom tags
             input_request['Tags'] = {k: v for tag in args.tags for k, v in [tag.split('=', 1)] if '=' in tag}
         
-        if args.source_type == 'AWS': #PROCESS AWS
+        if args.source_type == 'AWS':                       # PROCESS AWS
             if args.security_group and args.security_group.startswith('sg-'):
                 input_request['InputSecurityGroups'] = [args.security_group]
             else:
@@ -74,7 +74,7 @@ def create_rtmp_input(args):
                 sg_id = create_security_group(client, cidr)
                 input_request['InputSecurityGroups'] = [sg_id]
                 
-        elif args.source_type == 'AWS_VPC':  #PROCESS AWS_VPC
+        elif args.source_type == 'AWS_VPC':                 # PROCESS AWS_VPC
             if not args.subnets or len(args.subnets) < 2:
                 sys.exit("Error: AWS_VPC requires at least 2 subnets")
                 
@@ -85,10 +85,9 @@ def create_rtmp_input(args):
             input_request['Vpc'] = vpc_config
             input_request['RoleArn'] = args.role_arn
             
-        elif args.source_type == 'ON_PREMISES': #PROCESS ON_PREMISES
+        elif args.source_type == 'ON_PREMISES':             # PROCESS ON_PREMISES
             network_id = args.network
-            if not network_id:
-                # Create basic network if none provided
+            if not network_id:                              # Create basic network if none provided
                 ip_pools = [{'Cidr': "10.0.0.0/24"}]
                 network_id = create_network(client, f"network-{uuid.uuid4()}", ip_pools)
             
@@ -107,36 +106,7 @@ def create_rtmp_input(args):
     except ClientError as e:
         sys.exit(f"Error: {e}")
 
-def format_output(response): # nice JSOPN report.
-    input_info = response.get('Input', {})
-    attached = len(input_info.get('AttachedChannels', [])) > 0
-    
-    report = {
-        "Input ID": input_info.get('Id', 'N/A'),
-        "Name": input_info.get('Name', 'N/A'),
-        "State": "attached" if attached else "detached",
-        "Attached Channels": input_info.get('AttachedChannels', []),
-        "Input ARN": input_info.get('Arn', 'N/A'),
-        "Type": input_info.get('Type', 'N/A'),
-        "Input Network Location": input_info.get('InputNetworkLocation', 'N/A'),
-        "Endpoints": [],
-        "Input Security Groups": input_info.get('SecurityGroups', []),
-        "Tags": input_info.get('Tags', {})
-    }
-    
-    for dest in input_info.get('Destinations', []):
-        endpoint = {
-            "URL": dest.get('Url', 'N/A'),
-            "IPv4": dest.get('Ip', 'N/A'),
-            "Port": dest.get('Port', 'N/A'),
-            "Network": dest.get('Network', 'N/A'),
-            "Network Routes": dest.get('NetworkRoutes', [])
-        }
-        report["Endpoints"].append(endpoint)
-    
-    return report
-
-def parse_args(): #Command line args.
+def parse_args():                                               #Command line args.
     parser = argparse.ArgumentParser(description='Create AWS MediaLive RTMP Push Input')
     parser.add_argument('--config', type=str, help='Path to JSON configuration file')
     parser.add_argument('--name', type=str, help='Name prefix for the RTMP input')
@@ -157,16 +127,13 @@ def parse_args(): #Command line args.
 
 def main():
     try:
-        args = parse_args()
-        
-        # Minimal validation
-        if not args.config and (not args.source_type or not args.app_name or not args.app_instance):
+        args = parse_args()                                      # Minimal validation
+        if not args.config and (not args.source_type or not args.app_name or not args.app_instance):        
             sys.exit("Error: --config or --source-type, --app-name, and --app-instance are required")
         
-        response = create_rtmp_input(args)
-        report = format_output(response)
-        
-        print(json.dumps(report, indent=2))
+        response = create_rtmp_input(args)               
+        print(json.dumps(response, indent=2, default=str))       # Dump AWS json
+       
         return 0
     except Exception as e:
         print(json.dumps({"error": str(e)}))
